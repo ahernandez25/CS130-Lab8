@@ -30,7 +30,7 @@ struct Particle{
 
     
 
-    void Eueler_Step(float h){
+    void Euler_Step(float h){
 	x = x + (h*v);
 	v = v + ((h/m)*f);
     }//end Eueler_Step
@@ -190,12 +190,22 @@ void application::draw_event()
     if (!paused) {
         //
         //ADD NEW PARTICLES
-        //
+        
+	Add_Particles(10);
+
         //
         // SIMULATE YOUR PARTICLE HERE.
-        //
-        //
-        //
+        for(int i = 0; i < particles.size(); i++){
+	    particles[i].f[0] = 0;
+	    particles[i].f[1] = particles[i].m * -1 * 9.8;
+	    particles[i].f[2] = 0;
+
+	    particles[i].Euler_Step(h);
+	
+	    particles[i].Handle_Collision(damping, coeff_resititution);
+	}
+        
+        
         // UPDATE THE COLOR OF THE PARTICLE DYNAMICALLY
         //
     }
