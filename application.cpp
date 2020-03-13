@@ -122,7 +122,6 @@ void application::init_event()
     cout << "KEYBOARD CONTROLS: \n";
     cout << "  'p': Pause simulation\n";
     cout << "  'v': Toggle draw volcano" << endl;
-
     const GLfloat ambient[] = { 0.0, 0.0, 0.0, 1.0 };
     const GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
     const GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -202,7 +201,9 @@ void application::draw_event()
 
 	    particles[i].Euler_Step(h);
 	
-	    particles[i].Handle_Collision(damping, coeff_resititution);
+	    particles[i].Handle_Collision(0.5, 0.5);
+	    particles[i].Reset_Forces();
+
 	}
         
         
@@ -216,9 +217,11 @@ void application::draw_event()
         //
         //
         // DRAW YOUR PARTICLE USING GL_LINES HERE
-        //
-        // glVertex3f(...) endpoint 1
-        // glVertex3f(...) endpoint 2
+	float s = 0.04;       
+ 
+	for(int i = 0; i < particles.size(); i++){
+	    glVertex3f(particles[i].x, (particles[i].x + (s * particles[i].v)));
+	}         
         //
         //
     glEnd();
