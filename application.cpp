@@ -220,7 +220,8 @@ void application::draw_event()
 	float s = 0.04;       
  
 	for(int i = 0; i < particles.size(); i++){
-	    glVertex3f(particles[i].x, (particles[i].x + (s * particles[i].v)));
+	    glVertex3f(particles[i].x[0], particles[i].x[1], particles[i].x[2]);
+	    glVertex3f( particles[i].x[0] + (s * particles[i].v[0]), particles[i].x[1] + (s * particles[i].v[1]), particles[i].x[2] + (s * particles[i].v[2]));
 	}         
         //
         //
