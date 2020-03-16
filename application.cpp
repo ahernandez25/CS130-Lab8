@@ -27,7 +27,7 @@ struct Particle{
     vec3 f;
     vec3 x;
     vec3 color;
-
+    float d;
     
 
     void Euler_Step(float h){
@@ -75,8 +75,10 @@ void Add_Particles(int n){
         p.x[2] = 10 * p.x[2];
 	
 	p.color[0] = 255;
-	p.color[1] = 255;
+	p.color[1] = 0;
 	p.color[2] = 0;
+
+	p.d = 0;
 
 	particles.push_back(p);
     }
@@ -85,7 +87,38 @@ void Add_Particles(int n){
 }//end Add_Particles
 
 
+vec3 Get_Particle_Color(float d){
 
+    vec3 toReturn;
+    if (d < 0.1){
+	toReturn[0] = 255;
+	toReturn[1] = 255;
+	toReturn[2] = 0;
+	return toReturn;
+    } else if (d < 1.5){
+	toReturn[0] = 255;
+        toReturn[1] = 128;
+        toReturn[2] = 0;
+        return toReturn;
+    }else if(d < 2) {
+	toReturn[0] = 255;
+        toReturn[1] = 255;
+        toReturn[2] = 255;
+        return toReturn;
+    }else if(d < 3){
+	toReturn[0] = 183;
+        toReturn[1] = 94;
+        toReturn[2] = 94;
+        return toReturn;
+    }else{
+	toReturn[0] = 0.5;
+        toReturn[1] = 0.5;
+        toReturn[2] = 0.5;
+        return toReturn;
+
+    }  
+
+}//end Get_Particle_Color
 
 
 void draw_grid(int dim);
@@ -190,7 +223,7 @@ void application::draw_event()
         //
         //ADD NEW PARTICLES
         
-	Add_Particles(10);
+	Add_Particles(20);
 
         //
         // SIMULATE YOUR PARTICLE HERE.
@@ -203,12 +236,17 @@ void application::draw_event()
 	
 	    particles[i].Handle_Collision(0.5, 0.5);
 	    particles[i].Reset_Forces();
+	
+	    particles[i].d = particles[i].d + h;
+	
+	     particles[i].color = Get_Particle_Color(particles[i].d);
 
+	    glColor3f( particles[i].color[0], particles[i].color[1], particles[1].color[2]  );
 	}
         
         
         // UPDATE THE COLOR OF THE PARTICLE DYNAMICALLY
-        //
+        
     }
 
     glLineWidth(2.0);
@@ -218,9 +256,15 @@ void application::draw_event()
         //
         // DRAW YOUR PARTICLE USING GL_LINES HERE
 	float s = 0.04;       
- 
+ 	
+	
+
 	for(int i = 0; i < particles.size(); i++){
-	    glVertex3f(particles[i].x[0], particles[i].x[1], particles[i].x[2]);
+	   	//particles[i].d = particles[i].d + h;
+
+//		particles[i].color = Get_Particle_Color(particles[i].d);
+
+		 glVertex3f(particles[i].x[0], particles[i].x[1], particles[i].x[2]);
 	    glVertex3f( particles[i].x[0] + (s * particles[i].v[0]), particles[i].x[1] + (s * particles[i].v[1]), particles[i].x[2] + (s * particles[i].v[2]));
 	}         
         //
