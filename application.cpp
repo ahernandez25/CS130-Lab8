@@ -66,13 +66,13 @@ void Add_Particles(int n){
     for(int i = 0; i < n; i++){
 	Particle p;
 	p.m = 1;
-	p.x[0] = randomNum(0,0.2);
+	p.x[0] = randomNum(-0.2,0.2);
 	p.x[1] = 0.05;
-	p.x[2] = randomNum(0,0.2);
+	p.x[2] = randomNum(-0.2,0.2);
 
  	p.v[0] = 10 * p.x[0];
-        p.x[1] = randomNum(1,10);
-        p.x[2] = 10 * p.x[2];
+        p.v[1] = randomNum(1,10);
+        p.v[2] = 10 * p.x[2];
 	
 	p.color[0] = 255;
 	p.color[1] = 0;
@@ -87,7 +87,9 @@ void Add_Particles(int n){
 }//end Add_Particles
 
 
-vec3 Get_Particle_Color(float d){
+vec3 Get_Particle_Color(float d, float h){
+
+    int x ;
 
     vec3 toReturn;
     if (d < 0.1){
@@ -96,24 +98,27 @@ vec3 Get_Particle_Color(float d){
 	toReturn[2] = 0;
 	return toReturn;
     } else if (d < 1.5){
+	x = 255 / (d * h) ;
+
 	toReturn[0] = 255;
-        toReturn[1] = 128;
+        toReturn[1] = x;
         toReturn[2] = 0;
         return toReturn;
     }else if(d < 2) {
 	toReturn[0] = 255;
-        toReturn[1] = 255;
-        toReturn[2] = 255;
+        toReturn[1] = 0;
+        toReturn[2] = 0;
         return toReturn;
     }else if(d < 3){
-	toReturn[0] = 183;
-        toReturn[1] = 94;
-        toReturn[2] = 94;
+	x = 170 / (d*h);
+	toReturn[0] = 255;
+        toReturn[1] = x;
+        toReturn[2] = x;
         return toReturn;
     }else{
-	toReturn[0] = 0.5;
-        toReturn[1] = 0.5;
-        toReturn[2] = 0.5;
+	toReturn[0] = 170;
+        toReturn[1] = 170;
+        toReturn[2] = 170;
         return toReturn;
 
     }  
@@ -239,9 +244,9 @@ void application::draw_event()
 	
 	    particles[i].d = particles[i].d + h;
 	
-	     particles[i].color = Get_Particle_Color(particles[i].d);
-
-	    glColor3f( particles[i].color[0], particles[i].color[1], particles[1].color[2]  );
+	     particles[i].color = Get_Particle_Color(particles[i].d, h);
+	
+	//    glColor3f( particles[i].color[0], particles[i].color[1], particles[1].color[2]  );
 	}
         
         
@@ -263,6 +268,9 @@ void application::draw_event()
 	   	//particles[i].d = particles[i].d + h;
 
 //		particles[i].color = Get_Particle_Color(particles[i].d);
+
+ glColor3f( particles[i].color[0], particles[i].color[1], particles[i].color[2]  );
+
 
 		 glVertex3f(particles[i].x[0], particles[i].x[1], particles[i].x[2]);
 	    glVertex3f( particles[i].x[0] + (s * particles[i].v[0]), particles[i].x[1] + (s * particles[i].v[1]), particles[i].x[2] + (s * particles[i].v[2]));
